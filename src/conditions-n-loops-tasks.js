@@ -266,6 +266,7 @@ function isContainNumber(num, digit) {
     if (n % 10 === digit) return true;
     n = Math.floor(n / 10);
   }
+
   return false;
 }
 
@@ -282,8 +283,25 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  for (let i = 1; i < arr.length; i += 1) {
+    let lsum = 0;
+    let rsum = 0;
+
+    for (let j = 0; j < i; j += 1) {
+      lsum += arr[j];
+    }
+
+    for (let j = i + 1; j < arr.length; j += 1) {
+      rsum += arr[j];
+    }
+
+    if (lsum === rsum) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 /**
@@ -307,8 +325,45 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = new Array(size);
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = new Array(size);
+  }
+
+  let num = 1;
+  let top = 0;
+  let bot = size - 1;
+  let left = 0;
+  let right = size - 1;
+
+  while (num <= size * size) {
+    for (let i = left; i <= right; i += 1) {
+      matrix[top][i] = num;
+      num += 1;
+    }
+    top += 1;
+
+    for (let i = top; i <= bot; i += 1) {
+      matrix[i][right] = num;
+      num += 1;
+    }
+    right -= 1;
+
+    for (let i = right; i >= left; i -= 1) {
+      matrix[bot][i] = num;
+      num += 1;
+    }
+    bot -= 1;
+
+    for (let i = bot; i >= top; i -= 1) {
+      matrix[i][left] = num;
+      num += 1;
+    }
+    left += 1;
+  }
+
+  return matrix;
 }
 
 /**
@@ -326,8 +381,27 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const n = matrix.length;
+  const res = matrix;
+
+  for (let i = 0; i < n; i += 1) {
+    for (let j = i; j < n; j += 1) {
+      const tmp = res[i][j];
+      res[i][j] = res[j][i];
+      res[j][i] = tmp;
+    }
+  }
+
+  for (let i = 0; i < n; i += 1) {
+    for (let j = 0; j < n / 2; j += 1) {
+      const tmp = res[i][j];
+      res[i][j] = res[i][n - 1 - j];
+      res[i][n - 1 - j] = tmp;
+    }
+  }
+
+  return res;
 }
 
 /**
