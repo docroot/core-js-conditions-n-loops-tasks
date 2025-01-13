@@ -418,8 +418,39 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const res = arr;
+
+  function swap(i, j) {
+    const temp = res[i];
+    res[i] = res[j];
+    res[j] = temp;
+  }
+
+  function partition(l, r) {
+    const x = res[r];
+    let i = l - 1;
+
+    for (let j = l; j < r; j += 1) {
+      if (res[j] <= x) {
+        i += 1;
+        swap(i, j);
+      }
+    }
+    swap(i + 1, r);
+    return i + 1;
+  }
+
+  function quickSort(l, r) {
+    if (l < r) {
+      const q = partition(l, r);
+      quickSort(l, q - 1);
+      quickSort(q + 1, r);
+    }
+  }
+
+  quickSort(0, res.length - 1);
+  return res;
 }
 
 /**
@@ -439,8 +470,33 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let res = '';
+  const len = str.length;
+  const chars = [];
+  for (let i = 0; i < len; i += 1) {
+    chars[i] = str[i];
+  }
+
+  for (let iter = 0; iter < iterations; iter += 1) {
+    let l = 1;
+    let r = len - 1;
+    if (len % 2 !== 0) r -= 1;
+    while (l < r) {
+      for (let i = l; i < r; i += 2) {
+        const tmp = chars[i];
+        chars[i] = chars[i + 1];
+        chars[i + 1] = tmp;
+      }
+      l += 1;
+      r -= 1;
+    }
+  }
+  for (let i = 0; i < len; i += 1) {
+    res += chars[i];
+  }
+
+  return res;
 }
 
 /**
@@ -460,8 +516,50 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const digits = [];
+  let n = number;
+  while (n > 0) {
+    digits.unshift(n % 10);
+    n = Math.floor(n / 10);
+  }
+
+  function swap(i, j) {
+    const temp = digits[i];
+    digits[i] = digits[j];
+    digits[j] = temp;
+  }
+
+  let i = digits.length - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i < 0) {
+    return number;
+  }
+
+  let j = digits.length - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  swap(i, j);
+
+  let left = i + 1;
+  let right = digits.length - 1;
+  while (left < right) {
+    swap(left, right);
+    left += 1;
+    right -= 1;
+  }
+
+  let result = 0;
+  for (let k = 0; k < digits.length; k += 1) {
+    result = result * 10 + digits[k];
+  }
+
+  return result;
 }
 
 module.exports = {
