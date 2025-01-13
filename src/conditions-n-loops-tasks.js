@@ -471,29 +471,29 @@ function sortByAsc(arr) {
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
 function shuffleChar(str, iterations) {
-  let res = '';
+  let res = str;
   const len = str.length;
+  const hlen = Math.floor(len / 2);
   const chars = [];
-  for (let i = 0; i < len; i += 1) {
-    chars[i] = str[i];
-  }
+  let effectiveIterations = iterations;
 
-  for (let iter = 0; iter < iterations; iter += 1) {
-    let l = 1;
-    let r = len - 1;
-    if (len % 2 !== 0) r -= 1;
-    while (l < r) {
-      for (let i = l; i < r; i += 2) {
-        const tmp = chars[i];
-        chars[i] = chars[i + 1];
-        chars[i + 1] = tmp;
-      }
+  for (let iter = 0; iter < effectiveIterations; iter += 1) {
+    let l = 0;
+    let r = hlen;
+    for (let i = 0; i < res.length - 1; i += 2) {
+      chars[l] = res[i];
+      chars[r] = res[i + 1];
       l += 1;
-      r -= 1;
+      r += 1;
     }
-  }
-  for (let i = 0; i < len; i += 1) {
-    res += chars[i];
+    res = '';
+    for (let i = 0; i < len; i += 1) {
+      res += chars[i];
+    }
+    if (res === str) {
+      effectiveIterations = (iterations % (iter + 1)) + 1;
+      iter = 0;
+    }
   }
 
   return res;
